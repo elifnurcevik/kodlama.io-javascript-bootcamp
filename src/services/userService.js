@@ -2,6 +2,7 @@ import { users } from "../data/users.js"
 import DataError from "../models/dataError.js"
 
 export default class UserService {
+    
     constructor(loggerService) {
         this.employees = []
         this.customers = []
@@ -14,24 +15,22 @@ export default class UserService {
             console.log(user);
             switch (user.type) {
                 case "customer":
-                    if (!this.checkCustomerValidityForErrors(user)) {
+                    if (!this.checkUserValidityForErrors(user)) {
                         this.customers.push(user)
                     }
                     break;
                 case "employee":
-                    if (!this.checkEmployeeValidityForErrors(user)) {
+                    if (!this.checkUserValidityForErrors(user)) {
                         this.employees.push(user)
                     }
                     break;
                 default:
                     this.errors.push(new DataError("Wrong user type", user))
-                    break;
             }
         }
     }
 
-    //formik-yup
-    checkCustomerValidityForErrors(user) {
+    checkUserValidityForErrors(user) {
         let requiredFields = "id firstName lastName age city".split(" ")
         let hasErrors = false
         for (const field of requiredFields) {
@@ -41,41 +40,30 @@ export default class UserService {
             }
         }
 
-        if (Number.isNaN(Number.parseInt(+user.age))) {
-            hasErrors = true
-            this.errors.push(new DataError(`Validation problem; ${user.age} is not a number`, user))
-        }
-
-        return hasErrors
-    }
-
-    checkEmployeeValidityForErrors(user) {
-        let requiredFields = "id firstName lastName age city salary".split(" ")
-        let hasErrors = false
-        for (const field of requiredFields) {
-            if (!user[field]) {
+        if(user.type == "customer"){
+            if (Number.isNaN(Number.parseInt(+user.age))) {
                 hasErrors = true
-                this.errors.push(new DataError(`Validation problem; ${field} is required`, user))
+                this.errors.push(new DataError(`Validation problem; ${user.age} is not a number`, user))
             }
         }
-        return hasErrors
+
+        return hasErrors    
     }
 
     add(user) {
         switch (user.type) {
             case "customer":
-                if (!this.checkCustomerValidityForErrors(user)) {
+                if (!this.checkUserValidityForErrors(user)) {
                     this.customers.push(user)
                 }
                 break;
             case "employee":
-                if (!this.checkEmployeeValidityForErrors(user)) {
+                if (!this.checkUserValidityForErrors(user)) {
                     this.employees.push(user)
                 }
                 break;
             default:
                 this.errors.push(new DataError("This user can not be added. Wrong user type", user))
-                break;
         }
         this.loggerService.log(user)
     }
@@ -85,7 +73,7 @@ export default class UserService {
     }
 
     getCustomerById(id) {
-        return this.customers.find(u => u.id == id)
+        return this.customers.find(user => user.id == id)
     }
 
     getCustomersSorted() {
@@ -99,4 +87,5 @@ export default class UserService {
             }
         })
     }
+    
 }

@@ -5,8 +5,8 @@ import UserService from "../services/userService.js"
 
 //console.log("User component yüklendi")
 
-let logger1 = new BaseLogger()
-let userService = new UserService(logger1)
+let logger = new BaseLogger()
+let userService = new UserService(logger)
 
 let user1 = new User(1, "Elif", "Çevik", "Van")
 let user2 = new User(2, "Oğuzhan", "Çevik", "İstanbul")
@@ -22,7 +22,6 @@ let user2 = new User(2, "Oğuzhan", "Çevik", "İstanbul")
 //userService.list()
 
 
-
 let customer = { id: 1, firstName: "Elif" }
 
 //prototyping
@@ -35,7 +34,6 @@ customer.lastName = "Çevik"
 //-----------------------------------------------------------
 
 userService.load()
-
 
 let customerToAdd = new Customer(6, "Abdullah", "Çevik", "İzmir", "bncg")
 customerToAdd.type = "customer"
