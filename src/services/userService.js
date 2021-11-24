@@ -2,7 +2,7 @@ import { users } from "../data/users.js"
 import DataError from "../models/dataError.js"
 
 export default class UserService {
-    
+
     constructor(loggerService) {
         this.employees = []
         this.customers = []
@@ -40,14 +40,14 @@ export default class UserService {
             }
         }
 
-        if(user.type == "customer"){
+        if (user.type == "customer") {
             if (Number.isNaN(Number.parseInt(+user.age))) {
                 hasErrors = true
                 this.errors.push(new DataError(`Validation problem; ${user.age} is not a number`, user))
             }
         }
 
-        return hasErrors    
+        return hasErrors
     }
 
     add(user) {
@@ -87,5 +87,5 @@ export default class UserService {
             }
         })
     }
-    
+
 }
